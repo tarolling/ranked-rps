@@ -2,7 +2,7 @@ name: Deploy to Pages
 
 on:
   push:
-    branches: site
+    branches: master
 
 permissions:
   pages: write
