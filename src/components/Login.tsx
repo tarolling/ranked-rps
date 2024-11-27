@@ -1,9 +1,10 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
+import { invoke } from "@tauri-apps/api/core";
 
 interface LoginProps {
-    onLogin: () => void;
+  onLogin: () => void;
 }
 
 const LoginContainer = styled.div`
@@ -45,36 +46,43 @@ const Button = styled.button`
 `;
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-    const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const navigate = useNavigate();
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        // Add actual authentication logic here
-        onLogin();
-        navigate("/home");
-    };
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    let validateLoginInfo = await invoke("login", {
+      username: "tauri",
+      password: "tauri",
+    });
+    if (validateLoginInfo) {
+      onLogin();
+      navigate("/home");
+    } else {
+      console.log("INVALID LOGIN!");
+    }
+  };
 
-    return (
-        <LoginContainer>
-            <form onSubmit={handleSubmit}>
-                <Input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <Input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <Button type="submit">Login</Button>
-            </form>
-        </LoginContainer>
-    );
+  return (
+    <LoginContainer>
+      <form onSubmit={handleSubmit}>
+        <Input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button type="submit">Login</Button>
+      </form>
+    </LoginContainer>
+  );
 };
 
 export default Login;

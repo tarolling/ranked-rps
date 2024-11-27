@@ -26,7 +26,7 @@ const Logo = styled.h1`
   letter-spacing: 2px;
 `;
 
-function App() {
+const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   return (
@@ -56,6 +56,6 @@ function App() {
       </HashRouter>
     </AppContainer>
   );
-}
+};
 
 export default App;

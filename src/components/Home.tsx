@@ -71,75 +71,76 @@ const Button = styled.button`
 `;
 
 const Home: React.FC = () => {
-    const navigate = useNavigate();
-    const [stats, setStats] = useState<GameStats>({
-        wins: 0,
-        losses: 0,
-        draws: 0,
+  const navigate = useNavigate();
+  const [stats, setStats] = useState<GameStats>({
+    wins: 0,
+    losses: 0,
+    draws: 0,
+  });
+  const [onlinePlayers, setOnlinePlayers] = useState<User[]>([]);
+
+  useEffect(() => {
+    // Simulate fetching stats and online players
+    setStats({
+      wins: 15,
+      losses: 10,
+      draws: 5,
     });
-    const [onlinePlayers, setOnlinePlayers] = useState<User[]>([]);
 
-    useEffect(() => {
-        // Simulate fetching stats and online players
-        setStats({
-            wins: 15,
-            losses: 10,
-            draws: 5,
-        });
+    setOnlinePlayers([
+      { id: "1", username: "Player1", rating: 1200 },
+      { id: "2", username: "Player2", rating: 1350 },
+      { id: "3", username: "Player3", rating: 1150 },
+    ]);
+  }, []);
 
-        setOnlinePlayers([
-            { id: "1", username: "Player1", rating: 1200 },
-            { id: "2", username: "Player2", rating: 1350 },
-            { id: "3", username: "Player3", rating: 1150 },
-        ]);
-    }, []);
+  const handleChallenge = (playerId: string) => {
+    console.log(playerId);
+    // Add challenge logic here
+    navigate("/game");
+  };
 
-    const handleChallenge = (playerId: string) => {
-        // Add challenge logic here
-        navigate("/game");
-    };
+  const startRandomGame = () => {
+    navigate("/game");
+  };
 
-    const startRandomGame = () => {
-        navigate("/game");
-    };
+  return (
+    <HomeContainer>
+      <Card>
+        <Title>Your Statistics</Title>
+        <StatGrid>
+          <StatItem>
+            <h3>Wins</h3>
+            <p>{stats.wins}</p>
+          </StatItem>
+          <StatItem>
+            <h3>Losses</h3>
+            <p>{stats.losses}</p>
+          </StatItem>
+          <StatItem>
+            <h3>Draws</h3>
+            <p>{stats.draws}</p>
+          </StatItem>
+        </StatGrid>
+        <Button onClick={startRandomGame}>Quick Match</Button>
+      </Card>
 
-    return (
-        <HomeContainer>
-            <Card>
-                <Title>Your Statistics</Title>
-                <StatGrid>
-                    <StatItem>
-                        <h3>Wins</h3>
-                        <p>{stats.wins}</p>
-                    </StatItem>
-                    <StatItem>
-                        <h3>Losses</h3>
-                        <p>{stats.losses}</p>
-                    </StatItem>
-                    <StatItem>
-                        <h3>Draws</h3>
-                        <p>{stats.draws}</p>
-                    </StatItem>
-                </StatGrid>
-                <Button onClick={startRandomGame}>Quick Match</Button>
-            </Card>
-
-            <Card>
-                <Title>Online Players</Title>
-                <PlayerList>
-                    {onlinePlayers.map((player) => (
-                        <PlayerCard
-                            key={player.id}
-                            onClick={() => handleChallenge(player.id)}
-                        >
-                            <span>{player.username}</span>
-                            <span>Rating: {player.rating}</span>
-                        </PlayerCard>
-                    ))}
-                </PlayerList>
-            </Card>
-        </HomeContainer>
-    );
+      <Card>
+        <Title>Online Players</Title>
+        <PlayerList>
+          {onlinePlayers.map((player) => (
+            <PlayerCard
+              key={player.id}
+              onClick={() => handleChallenge(player.id)}
+            >
+              <span>{player.username}</span>
+              <span>Rating: {player.rating}</span>
+            </PlayerCard>
+          ))}
+        </PlayerList>
+      </Card>
+    </HomeContainer>
+  );
 };
 
 export default Home;
